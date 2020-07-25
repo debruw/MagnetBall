@@ -9,18 +9,15 @@ public class SoundManager : MonoBehaviour
     public static SoundManager Instance { get { return _instance; } }
 
     public AudioSource[] gameSoundsList;
-    public AudioSource[] characterSoundsList;
 
 
     //Sound Enums
     public enum GameSounds
     {
-        Music
-    }
-
-    public enum CharacterSounds
-    {
-
+        Music,
+        BallHit,
+        Win,
+        Electricity
     }
 
     private void Awake()
@@ -33,6 +30,7 @@ public class SoundManager : MonoBehaviour
         {
             _instance = this;
         }
+        DontDestroyOnLoad(gameObject);
         if (!PlayerPrefs.HasKey("SOUND"))
         {
             PlayerPrefs.SetInt("SOUND", 1);
@@ -41,6 +39,8 @@ public class SoundManager : MonoBehaviour
         {
             PlayerPrefs.SetInt("VIBRATION", 1);
         }
+        playSound(GameSounds.Music);
+        playSound(GameSounds.Electricity);
     }
 
 
@@ -55,18 +55,5 @@ public class SoundManager : MonoBehaviour
     public void stopSound(GameSounds soundType)
     {
         gameSoundsList[(int)soundType].Stop();
-    }
-    
-    public void playSound(CharacterSounds soundType)
-    {
-        if (PlayerPrefs.GetInt("SOUND").Equals(1))
-        {
-            characterSoundsList[(int)soundType].Play();
-        }
-    }
-
-    public void stopSound(CharacterSounds soundType)
-    {
-        characterSoundsList[(int)soundType].Stop();
     }
 }

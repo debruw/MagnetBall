@@ -38,4 +38,24 @@ public class PlayerController : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, qua, Time.deltaTime * m_Speed);            
         }
     }
+
+    public GameObject MagnetEffect;
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("Ball"))
+        {
+            MagnetEffect.SetActive(true);
+            SoundManager.Instance.playSound(SoundManager.GameSounds.Electricity);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Ball"))
+        {
+            MagnetEffect.SetActive(false);
+            SoundManager.Instance.stopSound(SoundManager.GameSounds.Electricity);
+        }
+        
+    }
 }

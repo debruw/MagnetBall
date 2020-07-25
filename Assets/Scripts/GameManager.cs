@@ -11,8 +11,8 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get { return _instance; } }
 
     public int currentLevel = 0;
-    public int maxLevelNumber = 5;
-
+    int maxLevelNumber = 4;
+    public GameObject currentLevelObject;
     #region UIElements
     public GameObject NextBttn, PausePanel;
     public Text LevelText;
@@ -38,21 +38,22 @@ public class GameManager : MonoBehaviour
         {
             PlayerPrefs.SetInt("LevelId", currentLevel);
         }
+        SoundManager.Instance.stopSound(SoundManager.GameSounds.Electricity);
 
         //TODO Test için konuldu kaldırılacak
-        //currentLevel = 2;
+        //currentLevel = 0;
 
-        if (currentLevel > maxLevelNumber)
-        {
-            int rand = Random.Range(0, maxLevelNumber);
-            Instantiate(Resources.Load("Level" + rand), new Vector3(0, 0, 0), Quaternion.identity);
-        }
-        else
-        {
-            Instantiate(Resources.Load("Level" + currentLevel), new Vector3(0, 0, 0), Quaternion.identity);
-        }
-
-        LevelText.text = "Level " + (currentLevel + 1);
+        //if (currentLevel > maxLevelNumber)
+        //{
+        //    int rand = Random.Range(0, maxLevelNumber);
+        //    currentLevelObject = Instantiate(Resources.Load("Level" + rand), new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+        //}
+        //else
+        //{
+        //    currentLevelObject = Instantiate(Resources.Load("Level" + currentLevel), new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+        //}
+        //Camera.main.backgroundColor = currentLevelObject.GetComponent<LevelProperties>().BackGroundColor;
+        LevelText.text = (currentLevel + 1).ToString();
     }
 
     private void Start()
@@ -62,15 +63,23 @@ public class GameManager : MonoBehaviour
 
     public void GameWin()
     {
-        //Send level completed event
+        SoundManager.Instance.playSound(SoundManager.GameSounds.Win);
         currentLevel++;
         PlayerPrefs.SetInt("LevelId", currentLevel);
         NextBttn.SetActive(true);
     }
 
-    public void NextRetryButtonClick(bool bl)
+    public void NextButtonClick(bool bl)
     {
-        SceneManager.LoadScene("Scene_Game");
+        if (currentLevel > maxLevelNumber)
+        {
+            int rand = Random.Range(0, maxLevelNumber);
+            SceneManager.LoadScene("Scene_Game" + rand); 
+        }
+        else
+        {
+            SceneManager.LoadScene("Scene_Game" + currentLevel);
+        }
         Time.timeScale = 1f;
     }
 
