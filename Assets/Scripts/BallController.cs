@@ -14,20 +14,24 @@ public class BallController : MonoBehaviour
         //transform.position = GameManager.Instance.currentLevelObject.GetComponent<LevelProperties>().PlayerPosition.position;
     }
 
+    bool canMove = true;
     // Update is called once per frame
     void Update()
     {
-        if (transform.position.y < 2)
+        if (canMove)
         {
-            Vector3 targetDir = magnet.transform.position - transform.localPosition;
+            if (transform.position.y < 2)
+            {
+                Vector3 targetDir = magnet.transform.position - transform.localPosition;
 
-            // Rotating in 2D Plane...
-            targetDir.y = 0.0f;
-            targetDir = targetDir.normalized;
-            Debug.DrawRay(transform.position, targetDir, Color.red);
+                // Rotating in 2D Plane...
+                targetDir.y = 0.0f;
+                targetDir = targetDir.normalized;
+                Debug.DrawRay(transform.position, targetDir, Color.red);
 
-            //rb.AddForce(targetDir * speed);
-            rb.velocity = targetDir * speed;
+                //rb.AddForce(targetDir * speed);
+                rb.velocity = targetDir * speed;
+            }
         }
     }
 
@@ -36,15 +40,23 @@ public class BallController : MonoBehaviour
         if (other.CompareTag("FinishPoint"))
         {
             other.transform.GetChild(0).gameObject.SetActive(true);
-            GameManager.Instance.GameWin();
-            Destroy(gameObject);
-            SoundManager.Instance.stopSound(SoundManager.GameSounds.Electricity);
-            FindObjectOfType<PlayerController>().MagnetEffect.SetActive(false);
+            GetComponent<Animator>().SetTrigger("BallDestroy");
+            canMove = false;
+            GetComponent<TrailRenderer>().enabled = false;
+            GetComponent<Rigidbody>().velocity = Vector3.zero;
         }
         if (other.CompareTag("Jumper"))
         {
             GetComponent<Rigidbody>().AddForce(new Vector3(0, 100, 0));
         }
+    }
+
+    public void BallDestroy()
+    {        
+        GameManager.Instance.GameWin();
+        Destroy(gameObject);
+        SoundManager.Instance.stopSound(SoundManager.GameSounds.Electricity);
+        FindObjectOfType<PlayerController>().MagnetEffect.SetActive(false);
     }
 
     private void OnCollisionEnter(Collision collision)

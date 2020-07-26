@@ -269,7 +269,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8445160802151705154
 Transform:
   m_ObjectHideFlags: 0
@@ -399,11 +399,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2147915688431154811, guid: e18dc7060ea73914d985ec968a09bff7,
         type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.698
-      objectReference: {fileID: 0}
-    - target: {fileID: 2147915688431154811, guid: e18dc7060ea73914d985ec968a09bff7,
-        type: 3}
       propertyPath: m_LocalRotation.x
       value: -0.7071068
       objectReference: {fileID: 0}
@@ -441,6 +436,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2147915688445309755, guid: e18dc7060ea73914d985ec968a09bff7,
+        type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2147915688445309755, guid: e18dc7060ea73914d985ec968a09bff7,
+        type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 1.1110574
+      objectReference: {fileID: 0}
+    - target: {fileID: 2147915688445309755, guid: e18dc7060ea73914d985ec968a09bff7,
+        type: 3}
+      propertyPath: ShapeModule.m_Rotation.x
+      value: 100.44
+      objectReference: {fileID: 0}
+    - target: {fileID: 2147915688445309755, guid: e18dc7060ea73914d985ec968a09bff7,
+        type: 3}
+      propertyPath: ShapeModule.radius.value
+      value: 0.42661646
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e18dc7060ea73914d985ec968a09bff7, type: 3}

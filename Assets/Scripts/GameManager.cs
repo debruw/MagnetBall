@@ -16,8 +16,8 @@ public class GameManager : MonoBehaviour
     #region UIElements
     public GameObject NextBttn, PausePanel;
     public Text LevelText;
-    public GameObject soundButton, VibrationButton;
-
+    public GameObject soundButton, VibrationButton, LevelCompleted;
+    public GameObject MenuPanel;
     #endregion
 
     private void Awake()
@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
         else
         {
             PlayerPrefs.SetInt("LevelId", currentLevel);
-        }
+        }        
         SoundManager.Instance.stopSound(SoundManager.GameSounds.Electricity);
 
         //TODO Test için konuldu kaldırılacak
@@ -58,6 +58,10 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        if (PlayerPrefs.GetInt("UseMenu").Equals(1))
+        {
+            MenuPanel.SetActive(true);           
+        }
         NextBttn.SetActive(false);
     }
 
@@ -67,14 +71,20 @@ public class GameManager : MonoBehaviour
         currentLevel++;
         PlayerPrefs.SetInt("LevelId", currentLevel);
         NextBttn.SetActive(true);
+        LevelCompleted.SetActive(true);
     }
 
-    public void NextButtonClick(bool bl)
+    private void OnApplicationQuit()
     {
+        PlayerPrefs.SetInt("UseMenu", 1);
+    }
+
+    public void NextButtonClick()
+    {        
         if (currentLevel > maxLevelNumber)
         {
             int rand = Random.Range(0, maxLevelNumber);
-            SceneManager.LoadScene("Scene_Game" + rand); 
+            SceneManager.LoadScene("Scene_Game" + rand);
         }
         else
         {
