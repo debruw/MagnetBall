@@ -10,14 +10,17 @@ public class GameManager : MonoBehaviour
 
     public static GameManager Instance { get { return _instance; } }
 
-    public int currentLevel = 0;
+    int currentLevel = 0;
     int maxLevelNumber = 4;
-    public GameObject currentLevelObject;
+    GameObject currentLevelObject;
+    public MeshRenderer ray, Ball;
+
+
     #region UIElements
-    public GameObject NextBttn, PausePanel;
+    public GameObject NextBttn;
     public Text LevelText;
-    public GameObject soundButton, VibrationButton, LevelCompleted;
-    public GameObject MenuPanel;
+    public GameObject soundButton, VibrationButton;
+    public GameObject LevelCompleted, MenuPanel, inGamePanel;
     #endregion
 
     private void Awake()
@@ -37,31 +40,39 @@ public class GameManager : MonoBehaviour
         else
         {
             PlayerPrefs.SetInt("LevelId", currentLevel);
-        }        
+        }
+        if (PlayerPrefs.GetInt("UseMenu").Equals(1) || !PlayerPrefs.HasKey("UseMenu"))
+        {
+            MenuPanel.SetActive(true);
+            PlayerPrefs.SetInt("UseMenu", 1);
+        }
+        else
+        {
+            inGamePanel.GetComponent<Animator>().SetTrigger("ComeIn");
+        }
+
         SoundManager.Instance.stopSound(SoundManager.GameSounds.Electricity);
 
         //TODO Test için konuldu kaldırılacak
         //currentLevel = 0;
 
-        //if (currentLevel > maxLevelNumber)
-        //{
-        //    int rand = Random.Range(0, maxLevelNumber);
-        //    currentLevelObject = Instantiate(Resources.Load("Level" + rand), new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-        //}
-        //else
-        //{
-        //    currentLevelObject = Instantiate(Resources.Load("Level" + currentLevel), new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-        //}
-        //Camera.main.backgroundColor = currentLevelObject.GetComponent<LevelProperties>().BackGroundColor;
+        if (currentLevel > maxLevelNumber)
+        {
+            int rand = Random.Range(0, maxLevelNumber);
+            currentLevelObject = Instantiate(Resources.Load("Level" + rand), new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+        }
+        else
+        {
+            currentLevelObject = Instantiate(Resources.Load("Level" + currentLevel), new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+        }
+        Camera.main.backgroundColor = currentLevelObject.GetComponent<LevelProperties>().cameraColor;
+        Ball.material = currentLevelObject.GetComponent<LevelProperties>().ballMaterial;
+        ray.material = currentLevelObject.GetComponent<LevelProperties>().rayMaterial;
         LevelText.text = (currentLevel + 1).ToString();
     }
 
     private void Start()
     {
-        if (PlayerPrefs.GetInt("UseMenu").Equals(1))
-        {
-            MenuPanel.SetActive(true);           
-        }
         NextBttn.SetActive(false);
     }
 
@@ -80,16 +91,18 @@ public class GameManager : MonoBehaviour
     }
 
     public void NextButtonClick()
-    {        
-        if (currentLevel > maxLevelNumber)
-        {
-            int rand = Random.Range(0, maxLevelNumber);
-            SceneManager.LoadScene("Scene_Game" + rand);
-        }
-        else
-        {
-            SceneManager.LoadScene("Scene_Game" + currentLevel);
-        }
+    {
+        //if (currentLevel > maxLevelNumber)
+        //{
+        int rand = Random.Range(0, maxLevelNumber);
+        //SceneManager.LoadScene("Scene_Game" + rand);
+        //}
+        //else
+        //{
+        //SceneManager.LoadScene("Scene_Game" + currentLevel);
+        //}
+        PlayerPrefs.SetInt("UseMenu", 0);
+        SceneManager.LoadScene("Scene_Game");
         Time.timeScale = 1f;
     }
 
@@ -99,17 +112,17 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
     }
 
-    public void PauseButtonClick()
-    {
-        PausePanel.SetActive(true);
-        Time.timeScale = 0f;
-    }
+    //public void PauseButtonClick()
+    //{
+    //    PausePanel.SetActive(true);
+    //    Time.timeScale = 0f;
+    //}
 
-    public void ContinueButtonClick()
-    {
-        Time.timeScale = 1f;
-        PausePanel.SetActive(false);
-    }
+    //public void ContinueButtonClick()
+    //{
+    //    Time.timeScale = 1f;
+    //    PausePanel.SetActive(false);
+    //}
 
     public void SoundButtonClick()
     {

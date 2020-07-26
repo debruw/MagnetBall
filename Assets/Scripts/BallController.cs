@@ -14,7 +14,7 @@ public class BallController : MonoBehaviour
         //transform.position = GameManager.Instance.currentLevelObject.GetComponent<LevelProperties>().PlayerPosition.position;
     }
 
-    bool canMove = true;
+    public bool canMove = true;
     // Update is called once per frame
     void Update()
     {
@@ -44,6 +44,7 @@ public class BallController : MonoBehaviour
             canMove = false;
             GetComponent<TrailRenderer>().enabled = false;
             GetComponent<Rigidbody>().velocity = Vector3.zero;
+            GameManager.Instance.GameWin();
         }
         if (other.CompareTag("Jumper"))
         {
@@ -52,11 +53,15 @@ public class BallController : MonoBehaviour
     }
 
     public void BallDestroy()
-    {        
-        GameManager.Instance.GameWin();
-        Destroy(gameObject);
+    {
+        //gameObject.SetActive(false);
         SoundManager.Instance.stopSound(SoundManager.GameSounds.Electricity);
         FindObjectOfType<PlayerController>().MagnetEffect.SetActive(false);
+    }
+
+    public void MakeMove()
+    {
+        canMove = true;
     }
 
     private void OnCollisionEnter(Collision collision)
