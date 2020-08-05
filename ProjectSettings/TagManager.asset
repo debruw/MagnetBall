@@ -6,7 +6,9 @@ TagManager:
   tags:
   - FinishPoint
   - Ball
-  - Jumper
+  - Thorn
+  - Coin
+  - Reverse
   layers:
   - Default
   - TransparentFX

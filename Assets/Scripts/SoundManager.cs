@@ -17,7 +17,8 @@ public class SoundManager : MonoBehaviour
         Music,
         BallHit,
         Win,
-        Electricity
+        Electricity,
+        Lose
     }
 
     private void Awake()

@@ -12,12 +12,6 @@ public class PlayerController : MonoBehaviour
     Vector3 dir, movementVector = Vector3.right;
     float angle;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -55,7 +49,12 @@ public class PlayerController : MonoBehaviour
         {
             MagnetEffect.SetActive(false);
             SoundManager.Instance.stopSound(SoundManager.GameSounds.Electricity);
-        }
-        
+        }        
+    }
+
+    public MeshRenderer magnetMeshRend;
+    public void ChangeMagnetColor(Color clr)
+    {
+        magnetMeshRend.material.SetColor("_Color1_T", clr);
     }
 }

@@ -10,17 +10,20 @@ public class GameManager : MonoBehaviour
 
     public static GameManager Instance { get { return _instance; } }
 
-    int currentLevel = 0;
+    int currentLevel = 0, currentStage = 0;
     int maxLevelNumber = 4;
     GameObject currentLevelObject;
     public MeshRenderer ray, Ball;
-
+    public CameraShake camShake;
+    public GameObject magnet;
+    public int CollectedCoinCount;
 
     #region UIElements
-    public GameObject NextBttn;
-    public Text LevelText;
+    public GameObject NextBttn, TapToNextButton;
+    public Text LevelNoText, LevelText;
     public GameObject soundButton, VibrationButton;
-    public GameObject LevelCompleted, MenuPanel, inGamePanel;
+    public GameObject LevelCompleted, MenuPanel, inGamePanel, LevelFailPanel;
+    public GameObject[] tickBoxes;
     #endregion
 
     private void Awake()
@@ -46,15 +49,17 @@ public class GameManager : MonoBehaviour
             MenuPanel.SetActive(true);
             PlayerPrefs.SetInt("UseMenu", 1);
         }
-        else
+        else if (PlayerPrefs.GetInt("UseMenu").Equals(0))
         {
             inGamePanel.GetComponent<Animator>().SetTrigger("ComeIn");
+            Ball.GetComponent<BallController>().canMove = true;
+            magnet.GetComponent<Animator>().enabled = false;
         }
 
         SoundManager.Instance.stopSound(SoundManager.GameSounds.Electricity);
 
         //TODO Test için konuldu kaldırılacak
-        //currentLevel = 0;
+        //currentLevel = 1;
 
         if (currentLevel > maxLevelNumber)
         {
@@ -65,15 +70,64 @@ public class GameManager : MonoBehaviour
         {
             currentLevelObject = Instantiate(Resources.Load("Level" + currentLevel), new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
         }
+        currentStage = currentLevel / 3;
+        CheckTicksStart();
+
         Camera.main.backgroundColor = currentLevelObject.GetComponent<LevelProperties>().cameraColor;
         Ball.material = currentLevelObject.GetComponent<LevelProperties>().ballMaterial;
         ray.material = currentLevelObject.GetComponent<LevelProperties>().rayMaterial;
-        LevelText.text = (currentLevel + 1).ToString();
+        LevelNoText.text = (currentStage + 1).ToString();
+        LevelText.color = currentLevelObject.GetComponent<LevelProperties>().rayMaterial.color;
+        tickBoxes[0].GetComponent<Image>().color = currentLevelObject.GetComponent<LevelProperties>().rayMaterial.color;
+        tickBoxes[1].GetComponent<Image>().color = currentLevelObject.GetComponent<LevelProperties>().rayMaterial.color;
+        tickBoxes[2].GetComponent<Image>().color = currentLevelObject.GetComponent<LevelProperties>().rayMaterial.color;
     }
 
     private void Start()
     {
         NextBttn.SetActive(false);
+        CollectedCoinCount = PlayerPrefs.GetInt("GlobalCoinCount");
+    }
+
+    public void CheckTicksFinish()
+    {
+        if (currentLevel % 3 == 0)
+        {
+            if (currentLevel / 3 != 0)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    if (!tickBoxes[i].transform.GetChild(0).gameObject.activeSelf)
+                    {
+                        tickBoxes[i].transform.GetChild(0).gameObject.SetActive(true);
+                        tickBoxes[i].GetComponent<Animation>().Play();
+                    }
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < currentLevel % 3; i++)
+            {
+                if (!tickBoxes[i].transform.GetChild(0).gameObject.activeSelf)
+                {
+                    tickBoxes[i].transform.GetChild(0).gameObject.SetActive(true);
+                    tickBoxes[i].GetComponent<Animation>().Play();
+                }
+            }
+        }
+    }
+
+    public void CheckTicksStart()
+    {
+        for (int i = 0; i < currentLevel % 3; i++)
+        {
+            if (!tickBoxes[i].transform.GetChild(0).gameObject.activeSelf)
+            {
+                tickBoxes[i].transform.GetChild(0).gameObject.SetActive(true);
+                tickBoxes[i].GetComponent<Animation>().Play();
+            }
+        }
     }
 
     public void GameWin()
@@ -81,8 +135,33 @@ public class GameManager : MonoBehaviour
         SoundManager.Instance.playSound(SoundManager.GameSounds.Win);
         currentLevel++;
         PlayerPrefs.SetInt("LevelId", currentLevel);
-        NextBttn.SetActive(true);
-        LevelCompleted.SetActive(true);
+        
+        CheckTicksFinish();
+        if (currentLevel % 3 == 0)
+        {
+            if (currentLevel / 3 != 0)
+            {
+                LevelCompleted.SetActive(true);
+                NextBttn.SetActive(true);
+            }
+            else
+            {
+                TapToNextButton.SetActive(true);
+            }
+        }
+        else
+        {
+            TapToNextButton.SetActive(true);
+        }
+
+
+        PlayerPrefs.SetInt("GlobalCoinCount", CollectedCoinCount);
+    }
+
+    public void GameLose()
+    {
+        SoundManager.Instance.playSound(SoundManager.GameSounds.Lose);
+        LevelFailPanel.SetActive(true);
     }
 
     private void OnApplicationQuit()
@@ -92,15 +171,6 @@ public class GameManager : MonoBehaviour
 
     public void NextButtonClick()
     {
-        //if (currentLevel > maxLevelNumber)
-        //{
-        int rand = Random.Range(0, maxLevelNumber);
-        //SceneManager.LoadScene("Scene_Game" + rand);
-        //}
-        //else
-        //{
-        //SceneManager.LoadScene("Scene_Game" + currentLevel);
-        //}
         PlayerPrefs.SetInt("UseMenu", 0);
         SceneManager.LoadScene("Scene_Game");
         Time.timeScale = 1f;

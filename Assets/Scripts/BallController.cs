@@ -7,14 +7,18 @@ public class BallController : MonoBehaviour
     public GameObject magnet;
     Rigidbody rb;
     public float speed = 10;
+    Vector3 startPosition;
 
-    private void Start()
+    private void Awake()
     {
+        canMove = false;
+        startPosition = transform.position;
         rb = GetComponent<Rigidbody>();
         //transform.position = GameManager.Instance.currentLevelObject.GetComponent<LevelProperties>().PlayerPosition.position;
     }
 
     public bool canMove = true;
+    public bool isReversed;
     // Update is called once per frame
     void Update()
     {
@@ -27,6 +31,10 @@ public class BallController : MonoBehaviour
                 // Rotating in 2D Plane...
                 targetDir.y = 0.0f;
                 targetDir = targetDir.normalized;
+                if(isReversed)
+                {
+                    targetDir = -targetDir;
+                }
                 Debug.DrawRay(transform.position, targetDir, Color.red);
 
                 //rb.AddForce(targetDir * speed);
@@ -35,6 +43,8 @@ public class BallController : MonoBehaviour
         }
     }
 
+    public PlayerController _playerController;
+    public GameObject pickUpEffect;
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("FinishPoint"))
@@ -42,13 +52,30 @@ public class BallController : MonoBehaviour
             other.transform.GetChild(0).gameObject.SetActive(true);
             GetComponent<Animator>().SetTrigger("BallDestroy");
             canMove = false;
-            GetComponent<TrailRenderer>().enabled = false;
             GetComponent<Rigidbody>().velocity = Vector3.zero;
+            GetComponent<TrailRenderer>().enabled = false;
+            transform.position = new Vector3(other.transform.position.x, transform.position.y, other.transform.position.z);
             GameManager.Instance.GameWin();
         }
-        if (other.CompareTag("Jumper"))
+        else if (other.CompareTag("Thorn"))
         {
-            GetComponent<Rigidbody>().AddForce(new Vector3(0, 100, 0));
+            GetComponent<Animator>().SetTrigger("BallDestroy");
+            GameManager.Instance.camShake.setCameraShakeImpulseValue(1);
+            GameManager.Instance.GameLose();
+        }
+        else if (other.CompareTag("Coin"))
+        {
+            GameManager.Instance.CollectedCoinCount++;
+            other.gameObject.SetActive(false);
+            GameManager.Instance.camShake.setCameraShakeImpulseValue(2);
+            Instantiate(pickUpEffect, transform.position, Quaternion.identity);
+        }
+        else if (other.CompareTag("Reverse"))
+        {
+            isReversed = true;
+            other.gameObject.SetActive(false);
+            _playerController.ChangeMagnetColor(Color.blue);
+            Instantiate(pickUpEffect, transform.position, Quaternion.identity);
         }
     }
 
@@ -62,10 +89,12 @@ public class BallController : MonoBehaviour
     public void MakeMove()
     {
         canMove = true;
+        GetComponent<TrailRenderer>().enabled = true;
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         SoundManager.Instance.playSound(SoundManager.GameSounds.BallHit);
+        GameManager.Instance.camShake.setCameraShakeImpulseValue(2);
     }
 }
