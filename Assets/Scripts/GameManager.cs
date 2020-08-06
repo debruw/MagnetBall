@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     public CameraShake camShake;
     public GameObject magnet;
     public int CollectedCoinCount;
+    public BallController _ballController;
 
     #region UIElements
     public GameObject NextBttn, TapToNextButton;
@@ -59,7 +60,7 @@ public class GameManager : MonoBehaviour
         SoundManager.Instance.stopSound(SoundManager.GameSounds.Electricity);
 
         //TODO Test için konuldu kaldırılacak
-        //currentLevel = 1;
+        currentLevel = 3;
 
         if (currentLevel > maxLevelNumber)
         {

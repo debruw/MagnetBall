@@ -558,6 +558,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: MagnetAndRay
       objectReference: {fileID: 0}
+    - target: {fileID: 8445160801266875579, guid: a2a873e65b5ed73479ba78f3c193289f,
+        type: 3}
+      propertyPath: floatingJoystick
+      value: 
+      objectReference: {fileID: 1695932954}
+    - target: {fileID: 8445160801266875579, guid: a2a873e65b5ed73479ba78f3c193289f,
+        type: 3}
+      propertyPath: magnetMeshRend
+      value: 
+      objectReference: {fileID: 372949674}
     - target: {fileID: 6462598571490779729, guid: a2a873e65b5ed73479ba78f3c193289f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -623,16 +633,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 9.7976
       objectReference: {fileID: 0}
-    - target: {fileID: 8445160801266875579, guid: a2a873e65b5ed73479ba78f3c193289f,
-        type: 3}
-      propertyPath: floatingJoystick
-      value: 
-      objectReference: {fileID: 1695932954}
-    - target: {fileID: 8445160801266875579, guid: a2a873e65b5ed73479ba78f3c193289f,
-        type: 3}
-      propertyPath: magnetMeshRend
-      value: 
-      objectReference: {fileID: 372949674}
     - target: {fileID: 8445160801266875576, guid: a2a873e65b5ed73479ba78f3c193289f,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
@@ -927,6 +927,25 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4573146868411379489, guid: 206d293e0d0c4a64eba6ed7383436121,
+        type: 3}
+      propertyPath: m_Name
+      value: Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 1444354516, guid: 206d293e0d0c4a64eba6ed7383436121, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 541977257410372731, guid: 206d293e0d0c4a64eba6ed7383436121,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3305678421295748610, guid: 206d293e0d0c4a64eba6ed7383436121,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5516028637932446251, guid: 206d293e0d0c4a64eba6ed7383436121,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -990,25 +1009,6 @@ PrefabInstance:
     - target: {fileID: 5057034772379695044, guid: 206d293e0d0c4a64eba6ed7383436121,
         type: 3}
       propertyPath: m_Color.a
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3305678421295748610, guid: 206d293e0d0c4a64eba6ed7383436121,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4573146868411379489, guid: 206d293e0d0c4a64eba6ed7383436121,
-        type: 3}
-      propertyPath: m_Name
-      value: Canvas
-      objectReference: {fileID: 0}
-    - target: {fileID: 1444354516, guid: 206d293e0d0c4a64eba6ed7383436121, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 541977257410372731, guid: 206d293e0d0c4a64eba6ed7383436121,
-        type: 3}
-      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9184264579852894003, guid: 206d293e0d0c4a64eba6ed7383436121,
@@ -1507,6 +1507,7 @@ MonoBehaviour:
   camShake: {fileID: 1557082720}
   magnet: {fileID: 103169680}
   CollectedCoinCount: 0
+  _ballController: {fileID: 976625920}
   NextBttn: {fileID: 1695932951}
   TapToNextButton: {fileID: 987265415}
   LevelNoText: {fileID: 1695932953}

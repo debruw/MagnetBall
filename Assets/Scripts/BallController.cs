@@ -19,6 +19,9 @@ public class BallController : MonoBehaviour
 
     public bool canMove = true;
     public bool isReversed;
+    public bool isInMagneticField;
+    public Vector3 magneticFieldPos;
+
     // Update is called once per frame
     void Update()
     {
@@ -27,15 +30,21 @@ public class BallController : MonoBehaviour
             if (transform.position.y < 2)
             {
                 Vector3 targetDir = magnet.transform.position - transform.localPosition;
+                if (isInMagneticField)
+                {
+                    targetDir = magneticFieldPos - transform.localPosition;
+                }
 
                 // Rotating in 2D Plane...
                 targetDir.y = 0.0f;
                 targetDir = targetDir.normalized;
-                if(isReversed)
+
+                if (isReversed)
                 {
                     targetDir = -targetDir;
                 }
                 Debug.DrawRay(transform.position, targetDir, Color.red);
+
 
                 //rb.AddForce(targetDir * speed);
                 rb.velocity = targetDir * speed;
