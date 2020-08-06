@@ -22,7 +22,7 @@ public class CameraShake : MonoBehaviour
         if (iShakeValue == 1)
             fCamShakeImpulse = 0.2f;
         else if (iShakeValue == 2)
-            fCamShakeImpulse = 0.03f;
+            fCamShakeImpulse = 0.02f;
         else if (iShakeValue == 3)
             fCamShakeImpulse = 1.3f;
         else if (iShakeValue == 4)
@@ -37,7 +37,7 @@ public class CameraShake : MonoBehaviour
     public void shakeCamera()
     {
         transform.position += new Vector3(0, Random.Range(-fCamShakeImpulse, fCamShakeImpulse), Random.Range(-fCamShakeImpulse, fCamShakeImpulse));
-        fCamShakeImpulse -= Time.deltaTime * fCamShakeImpulse * 4.0f;
+        fCamShakeImpulse -= Time.deltaTime * fCamShakeImpulse * 6.0f;
         if (fCamShakeImpulse < 0.01f)
             fCamShakeImpulse = 0.0f;
     }

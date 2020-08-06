@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     public GameObject magnet;
     public int CollectedCoinCount;
     public BallController _ballController;
+    int levelTickIndex;
 
     #region UIElements
     public GameObject NextBttn, TapToNextButton;
@@ -60,7 +61,7 @@ public class GameManager : MonoBehaviour
         SoundManager.Instance.stopSound(SoundManager.GameSounds.Electricity);
 
         //TODO Test için konuldu kaldırılacak
-        currentLevel = 3;
+        //currentLevel = 10;
 
         if (currentLevel > maxLevelNumber)
         {
@@ -71,7 +72,24 @@ public class GameManager : MonoBehaviour
         {
             currentLevelObject = Instantiate(Resources.Load("Level" + currentLevel), new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
         }
-        currentStage = currentLevel / 3;
+
+        if (currentLevel < 10)
+        {
+            levelTickIndex = 1;
+            tickBoxes[0].SetActive(false);
+            tickBoxes[2].SetActive(false);
+        }
+        else if (currentLevel >= 10 && currentLevel < 20)
+        {
+            levelTickIndex = 2;
+            tickBoxes[2].SetActive(false);
+        }
+        else if (currentLevel >= 20)
+        {
+            levelTickIndex = 3;
+        }
+        currentStage = PlayerPrefs.GetInt("Current_Stage");
+        Debug.Log("stage : " + currentStage + "  ///  level : " + currentLevel);
         CheckTicksStart();
 
         Camera.main.backgroundColor = currentLevelObject.GetComponent<LevelProperties>().cameraColor;
@@ -92,42 +110,99 @@ public class GameManager : MonoBehaviour
 
     public void CheckTicksFinish()
     {
-        if (currentLevel % 3 == 0)
+        switch (levelTickIndex)
         {
-            if (currentLevel / 3 != 0)
-            {
-                for (int i = 0; i < 3; i++)
+            case 1:
+                currentStage++;
+                tickBoxes[1].transform.GetChild(0).gameObject.SetActive(true);
+                tickBoxes[1].GetComponent<Animation>().Play();
+                LevelCompleted.SetActive(true);
+                NextBttn.SetActive(true);
+                break;
+            case 2:
+                //leveli kontrol et
+                if (currentLevel % 2 == 1)
                 {
-                    if (!tickBoxes[i].transform.GetChild(0).gameObject.activeSelf)
-                    {
-                        tickBoxes[i].transform.GetChild(0).gameObject.SetActive(true);
-                        tickBoxes[i].GetComponent<Animation>().Play();
-                    }
+                    tickBoxes[0].transform.GetChild(0).gameObject.SetActive(true);
+                    tickBoxes[0].GetComponent<Animation>().Play();
+                    TapToNextButton.SetActive(true);
                 }
-            }
-        }
-        else
-        {
-            for (int i = 0; i < currentLevel % 3; i++)
-            {
-                if (!tickBoxes[i].transform.GetChild(0).gameObject.activeSelf)
+                else
                 {
-                    tickBoxes[i].transform.GetChild(0).gameObject.SetActive(true);
-                    tickBoxes[i].GetComponent<Animation>().Play();
+                    currentStage++;
+                    tickBoxes[1].transform.GetChild(0).gameObject.SetActive(true);
+                    tickBoxes[1].GetComponent<Animation>().Play();
+                    LevelCompleted.SetActive(true);
+                    NextBttn.SetActive(true);
                 }
-            }
+                break;
+            case 3:
+                //leveli kontrol et
+                if (currentLevel % 3 == 0)
+                {
+                    tickBoxes[0].transform.GetChild(0).gameObject.SetActive(true);
+                    tickBoxes[0].GetComponent<Animation>().Play();
+                    TapToNextButton.SetActive(true);
+                }
+                else if (currentLevel % 3 == 1)
+                {
+                    tickBoxes[1].transform.GetChild(0).gameObject.SetActive(true);
+                    tickBoxes[1].GetComponent<Animation>().Play();
+                    TapToNextButton.SetActive(true);
+                }
+                else if (currentLevel % 3 == 2)
+                {
+                    currentStage++;
+                    tickBoxes[2].transform.GetChild(0).gameObject.SetActive(true);
+                    tickBoxes[2].GetComponent<Animation>().Play();
+                    LevelCompleted.SetActive(true);
+                    NextBttn.SetActive(true);
+                }
+                break;
+            default:
+                break;
         }
+        PlayerPrefs.SetInt("Current_Stage", currentStage);
     }
 
     public void CheckTicksStart()
     {
-        for (int i = 0; i < currentLevel % 3; i++)
+        switch (levelTickIndex)
         {
-            if (!tickBoxes[i].transform.GetChild(0).gameObject.activeSelf)
-            {
-                tickBoxes[i].transform.GetChild(0).gameObject.SetActive(true);
-                tickBoxes[i].GetComponent<Animation>().Play();
-            }
+            case 1:
+
+                break;
+            case 2:
+                //leveli kontrol et
+                if (currentLevel % 2 == 1)
+                {
+                    tickBoxes[0].transform.GetChild(0).gameObject.SetActive(true);
+                    tickBoxes[0].GetComponent<Animation>().Play();
+                }
+                break;
+            case 3:
+                //leveli kontrol et
+                if (currentLevel % 3 == 0)
+                {
+                    tickBoxes[0].transform.GetChild(0).gameObject.SetActive(true);
+                    tickBoxes[0].GetComponent<Animation>().Play();
+                }
+                else if (currentLevel % 3 == 1)
+                {
+                    tickBoxes[0].transform.GetChild(0).gameObject.SetActive(true);
+                    tickBoxes[0].GetComponent<Animation>().Play();
+                    tickBoxes[1].transform.GetChild(0).gameObject.SetActive(true);
+                    tickBoxes[1].GetComponent<Animation>().Play();
+                }
+                else
+                {
+                    tickBoxes[0].transform.GetChild(0).gameObject.SetActive(false);
+                    tickBoxes[1].transform.GetChild(0).gameObject.SetActive(false);
+                    tickBoxes[2].transform.GetChild(0).gameObject.SetActive(false);
+                }
+                break;
+            default:
+                break;
         }
     }
 
@@ -136,26 +211,8 @@ public class GameManager : MonoBehaviour
         SoundManager.Instance.playSound(SoundManager.GameSounds.Win);
         currentLevel++;
         PlayerPrefs.SetInt("LevelId", currentLevel);
-        
+
         CheckTicksFinish();
-        if (currentLevel % 3 == 0)
-        {
-            if (currentLevel / 3 != 0)
-            {
-                LevelCompleted.SetActive(true);
-                NextBttn.SetActive(true);
-            }
-            else
-            {
-                TapToNextButton.SetActive(true);
-            }
-        }
-        else
-        {
-            TapToNextButton.SetActive(true);
-        }
-
-
         PlayerPrefs.SetInt("GlobalCoinCount", CollectedCoinCount);
     }
 
