@@ -54,7 +54,6 @@ public class GameManager : MonoBehaviour
         }
         else if (PlayerPrefs.GetInt("UseMenu").Equals(0))
         {
-            Debug.Log("usemenu2");
             inGamePanel.GetComponent<Animator>().SetTrigger("ComeIn");
             Ball.GetComponent<BallController>().canMove = true;
             magnet.GetComponent<Animator>().enabled = false;
