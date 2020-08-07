@@ -76,6 +76,7 @@ public class BallController : MonoBehaviour
         else if (other.CompareTag("Coin"))
         {
             GameManager.Instance.CollectedCoinCount++;
+            GameManager.Instance.CoinText.text = GameManager.Instance.CollectedCoinCount.ToString();
             other.gameObject.SetActive(false);
             GameManager.Instance.camShake.setCameraShakeImpulseValue(2);
             Instantiate(pickUpEffect, transform.position, Quaternion.identity);

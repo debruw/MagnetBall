@@ -36,10 +36,6 @@ public class SoundManager : MonoBehaviour
         {
             PlayerPrefs.SetInt("SOUND", 1);
         }
-        if (!PlayerPrefs.HasKey("VIBRATION"))
-        {
-            PlayerPrefs.SetInt("VIBRATION", 1);
-        }
         playSound(GameSounds.Music);
         playSound(GameSounds.Electricity);
     }

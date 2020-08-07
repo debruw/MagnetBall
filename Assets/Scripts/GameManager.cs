@@ -19,10 +19,11 @@ public class GameManager : MonoBehaviour
     public int CollectedCoinCount;
     public BallController _ballController;
     int levelTickIndex;
+    public GameObject soundManager;
 
     #region UIElements
     public GameObject NextBttn, TapToNextButton;
-    public Text LevelNoText, LevelText;
+    public Text LevelNoText, LevelText, CoinText;
     public GameObject soundButton, VibrationButton;
     public GameObject LevelCompleted, MenuPanel, inGamePanel, LevelFailPanel;
     public GameObject[] tickBoxes;
@@ -59,6 +60,15 @@ public class GameManager : MonoBehaviour
             magnet.GetComponent<Animator>().enabled = false;
         }
 
+        if (!PlayerPrefs.HasKey("VIBRATION"))
+        {
+            PlayerPrefs.SetInt("VIBRATION", 1);
+            VibrationButton.GetComponent<Image>().sprite = on;
+        }
+        if (SoundManager.Instance == null)
+        {
+            Instantiate(soundManager);
+        }
         SoundManager.Instance.stopSound(SoundManager.GameSounds.Electricity);
 
         //TODO Test için konuldu kaldırılacak
@@ -128,6 +138,7 @@ public class GameManager : MonoBehaviour
     {
         NextBttn.SetActive(false);
         CollectedCoinCount = PlayerPrefs.GetInt("GlobalCoinCount");
+        CoinText.text = CollectedCoinCount.ToString();
     }
 
     public void CheckTicksFinish()
@@ -290,19 +301,18 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public Sprite on, off;
     public void VibrateButtonClick()
     {
         if (PlayerPrefs.GetInt("VIBRATION").Equals(1))
         {//Vibration is on
             PlayerPrefs.SetInt("VIBRATION", 0);
-            VibrationButton.GetComponent<Image>().color = Color.red;
-            VibrationButton.GetComponentInChildren<Text>().text = "OFF";
+            VibrationButton.GetComponent<Image>().sprite = off;
         }
         else
         {//Vibration is off
             PlayerPrefs.SetInt("VIBRATION", 1);
-            VibrationButton.GetComponent<Image>().color = Color.green;
-            VibrationButton.GetComponentInChildren<Text>().text = "ON";
+            VibrationButton.GetComponent<Image>().sprite = on;
         }
     }
 }
