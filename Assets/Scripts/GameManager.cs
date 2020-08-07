@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get { return _instance; } }
 
     int currentLevel = 0, currentStage = 0;
-    int maxLevelNumber = 4;
+    int maxLevelNumber = 29;
     GameObject currentLevelObject;
     public MeshRenderer ray, Ball;
     public CameraShake camShake;
@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     public GameObject soundButton, VibrationButton;
     public GameObject LevelCompleted, MenuPanel, inGamePanel, LevelFailPanel;
     public GameObject[] tickBoxes;
+    public GameObject SwipeHelper, TeleportHelper, KeyHelper, ReverseHelper, MFieldHelper;
     #endregion
 
     private void Awake()
@@ -53,6 +54,7 @@ public class GameManager : MonoBehaviour
         }
         else if (PlayerPrefs.GetInt("UseMenu").Equals(0))
         {
+            Debug.Log("usemenu2");
             inGamePanel.GetComponent<Animator>().SetTrigger("ComeIn");
             Ball.GetComponent<BallController>().canMove = true;
             magnet.GetComponent<Animator>().enabled = false;
@@ -61,7 +63,7 @@ public class GameManager : MonoBehaviour
         SoundManager.Instance.stopSound(SoundManager.GameSounds.Electricity);
 
         //TODO Test için konuldu kaldırılacak
-        //currentLevel = 10;
+        //currentLevel = 25;
 
         if (currentLevel > maxLevelNumber)
         {
@@ -72,7 +74,6 @@ public class GameManager : MonoBehaviour
         {
             currentLevelObject = Instantiate(Resources.Load("Level" + currentLevel), new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
         }
-
         if (currentLevel < 10)
         {
             levelTickIndex = 1;
@@ -93,6 +94,7 @@ public class GameManager : MonoBehaviour
         CheckTicksStart();
 
         Camera.main.backgroundColor = currentLevelObject.GetComponent<LevelProperties>().cameraColor;
+        _ballController.gameObject.transform.position = currentLevelObject.GetComponent<LevelProperties>().ballPosition.position;
         Ball.material = currentLevelObject.GetComponent<LevelProperties>().ballMaterial;
         ray.material = currentLevelObject.GetComponent<LevelProperties>().rayMaterial;
         LevelNoText.text = (currentStage + 1).ToString();
@@ -100,6 +102,27 @@ public class GameManager : MonoBehaviour
         tickBoxes[0].GetComponent<Image>().color = currentLevelObject.GetComponent<LevelProperties>().rayMaterial.color;
         tickBoxes[1].GetComponent<Image>().color = currentLevelObject.GetComponent<LevelProperties>().rayMaterial.color;
         tickBoxes[2].GetComponent<Image>().color = currentLevelObject.GetComponent<LevelProperties>().rayMaterial.color;
+
+        if (currentLevel < 3)
+        {
+            SwipeHelper.SetActive(true);
+        }
+        else if (currentLevel == 7)
+        {
+            TeleportHelper.SetActive(true);
+        }
+        else if (currentLevel == 13)
+        {
+            KeyHelper.SetActive(true);
+        }
+        else if (currentLevel == 19)
+        {
+            ReverseHelper.SetActive(true);
+        }
+        else if (currentLevel == 25)
+        {
+            MFieldHelper.SetActive(true);
+        }
     }
 
     private void Start()
@@ -222,7 +245,7 @@ public class GameManager : MonoBehaviour
         LevelFailPanel.SetActive(true);
     }
 
-    private void OnApplicationQuit()
+    private void OnApplicationPause(bool pause)
     {
         PlayerPrefs.SetInt("UseMenu", 1);
     }

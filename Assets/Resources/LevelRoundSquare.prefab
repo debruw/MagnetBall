@@ -174,6 +174,7 @@ MonoBehaviour:
   ballMaterial: {fileID: 0}
   rayMaterial: {fileID: 0}
   cameraColor: {r: 0, g: 0, b: 0, a: 0}
+  ballPosition: {fileID: 4202113283341114954}
 --- !u!65 &7899572385770244949
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -240,7 +241,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4202113283341114954}
   m_Layer: 0
-  m_Name: PlayerPosition
+  m_Name: BallPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

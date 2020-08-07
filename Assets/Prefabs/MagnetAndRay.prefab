@@ -5052,6 +5052,8 @@ MonoBehaviour:
   m_Speed: 20
   oldY: 0
   MagnetEffect: {fileID: 8445160802151705155}
+  magnetMeshRend: {fileID: 0}
+  reverseEffect: {fileID: 0}
 --- !u!135 &8445160801266875578
 SphereCollider:
   m_ObjectHideFlags: 0

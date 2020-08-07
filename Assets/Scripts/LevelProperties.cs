@@ -6,4 +6,5 @@ public class LevelProperties : MonoBehaviour
 {
     public Material ballMaterial, rayMaterial;
     public Color cameraColor;
+    public Transform ballPosition;
 }

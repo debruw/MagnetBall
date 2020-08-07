@@ -38,7 +38,6 @@ public class MovingPlatform : MonoBehaviour
         {
             if (transform.position.z != Waypoints[CurrentPoint].transform.position.z)
             {
-                Debug.Log("1");
                 transform.position = Vector3.MoveTowards(transform.position, Waypoints[CurrentPoint].transform.position, speed * Time.deltaTime);
             }
 

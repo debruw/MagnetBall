@@ -25,6 +25,7 @@ public class BallController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //canmove da mobil için bir problem var
         if (canMove)
         {
             if (transform.position.y < 2)

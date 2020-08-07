@@ -27,10 +27,20 @@ public class PlayerController : MonoBehaviour
         angle = Mathf.Atan2(dir.z, dir.x) * Mathf.Rad2Deg;
         if (dir != Vector3.zero)
         {
+            StartCoroutine(WaitAndCloseHelpers());
             movementVector = dir;
             Quaternion qua = Quaternion.AngleAxis(angle - 90, Vector3.down);
             transform.rotation = Quaternion.Slerp(transform.rotation, qua, Time.deltaTime * m_Speed);            
         }
+    }
+    IEnumerator WaitAndCloseHelpers()
+    {
+        yield return new WaitForSeconds(2f);
+        GameManager.Instance.SwipeHelper.SetActive(false);
+        GameManager.Instance.TeleportHelper.SetActive(false);
+        GameManager.Instance.KeyHelper.SetActive(false);
+        GameManager.Instance.ReverseHelper.SetActive(false);
+        GameManager.Instance.MFieldHelper.SetActive(false);
     }
 
     public GameObject MagnetEffect;
@@ -53,8 +63,10 @@ public class PlayerController : MonoBehaviour
     }
 
     public MeshRenderer magnetMeshRend;
+    public GameObject reverseEffect;
     public void ChangeMagnetColor(Color clr)
     {
         magnetMeshRend.material.SetColor("_Color1_T", clr);
+        reverseEffect.SetActive(true);
     }
 }

@@ -517,6 +517,7 @@ MonoBehaviour:
   ballMaterial: {fileID: 0}
   rayMaterial: {fileID: 0}
   cameraColor: {r: 0, g: 0, b: 0, a: 0}
+  ballPosition: {fileID: 4202113283341114954}
 --- !u!1 &7740557709206846120
 GameObject:
   m_ObjectHideFlags: 0
@@ -558,7 +559,7 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Convex: 1
+  m_Convex: 0
   m_CookingOptions: 14
   m_Mesh: {fileID: 2534964839176971238, guid: 40e16d13e23cce94180f0c9bf6c92871, type: 3}
 --- !u!1 &8575574658808319953
@@ -571,7 +572,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4202113283341114954}
   m_Layer: 0
-  m_Name: PlayerPosition
+  m_Name: BallPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -611,7 +612,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 40e16d13e23cce94180f0c9bf6c92871,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.33
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 40e16d13e23cce94180f0c9bf6c92871,
         type: 3}
@@ -678,6 +679,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 28b8105f5afe05940a10e6a50a319179, type: 2}
+    - target: {fileID: -1504981713932161579, guid: 40e16d13e23cce94180f0c9bf6c92871,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 29b0bbefca022fe48be4b853e1e6129b, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 40e16d13e23cce94180f0c9bf6c92871, type: 3}
 --- !u!1 &8344055984007403831 stripped
