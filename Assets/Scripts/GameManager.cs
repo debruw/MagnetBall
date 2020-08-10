@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TapticPlugin;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -11,7 +12,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get { return _instance; } }
 
     int currentLevel = 0, currentStage = 0;
-    int maxLevelNumber = 29;
+    int maxLevelNumber = 64;
     GameObject currentLevelObject;
     public MeshRenderer ray, Ball;
     public CameraShake camShake;
@@ -72,15 +73,21 @@ public class GameManager : MonoBehaviour
         SoundManager.Instance.stopSound(SoundManager.GameSounds.Electricity);
 
         //TODO Test için konuldu kaldırılacak
-        //currentLevel = 25;
+        //currentLevel = 64;
 
         if (currentLevel > maxLevelNumber)
         {
             int rand = Random.Range(0, maxLevelNumber);
+            if (rand == PlayerPrefs.GetInt("LastLevel"))
+            {
+                rand = Random.Range(0, maxLevelNumber);
+            }
+            PlayerPrefs.SetInt("LastLevel", rand);
             currentLevelObject = Instantiate(Resources.Load("Level" + rand), new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
         }
         else
         {
+            Debug.Log(currentLevel);
             currentLevelObject = Instantiate(Resources.Load("Level" + currentLevel), new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
         }
         if (currentLevel < 10)
@@ -158,7 +165,8 @@ public class GameManager : MonoBehaviour
                 {
                     tickBoxes[0].transform.GetChild(0).gameObject.SetActive(true);
                     tickBoxes[0].GetComponent<Animation>().Play();
-                    TapToNextButton.SetActive(true);
+                    //TapToNextButton.SetActive(true);
+                    StartCoroutine(WaitAndNext());
                 }
                 else
                 {
@@ -175,13 +183,15 @@ public class GameManager : MonoBehaviour
                 {
                     tickBoxes[0].transform.GetChild(0).gameObject.SetActive(true);
                     tickBoxes[0].GetComponent<Animation>().Play();
-                    TapToNextButton.SetActive(true);
+                    //TapToNextButton.SetActive(true);
+                    StartCoroutine(WaitAndNext());
                 }
                 else if (currentLevel % 3 == 1)
                 {
                     tickBoxes[1].transform.GetChild(0).gameObject.SetActive(true);
                     tickBoxes[1].GetComponent<Animation>().Play();
-                    TapToNextButton.SetActive(true);
+                    //TapToNextButton.SetActive(true);
+                    StartCoroutine(WaitAndNext());
                 }
                 else if (currentLevel % 3 == 2)
                 {
@@ -196,6 +206,12 @@ public class GameManager : MonoBehaviour
                 break;
         }
         PlayerPrefs.SetInt("Current_Stage", currentStage);
+    }
+
+    IEnumerator WaitAndNext()
+    {
+        yield return new WaitForSeconds(1.2f);
+        NextButtonClick();
     }
 
     public void CheckTicksStart()
@@ -247,12 +263,16 @@ public class GameManager : MonoBehaviour
 
         CheckTicksFinish();
         PlayerPrefs.SetInt("GlobalCoinCount", CollectedCoinCount);
+        if (PlayerPrefs.GetInt("VIBRATION") == 1)
+            TapticManager.Impact(ImpactFeedback.Light);
     }
 
     public void GameLose()
     {
         SoundManager.Instance.playSound(SoundManager.GameSounds.Lose);
         LevelFailPanel.SetActive(true);
+        if (PlayerPrefs.GetInt("VIBRATION") == 1)
+            TapticManager.Impact(ImpactFeedback.Light);
     }
 
     private void OnApplicationPause(bool pause)
@@ -262,6 +282,8 @@ public class GameManager : MonoBehaviour
 
     public void NextButtonClick()
     {
+        if (PlayerPrefs.GetInt("VIBRATION") == 1)
+            TapticManager.Impact(ImpactFeedback.Light);
         PlayerPrefs.SetInt("UseMenu", 0);
         SceneManager.LoadScene("Scene_Game");
         Time.timeScale = 1f;
@@ -269,6 +291,8 @@ public class GameManager : MonoBehaviour
 
     public void HomeButtonClick()
     {
+        if (PlayerPrefs.GetInt("VIBRATION") == 1)
+            TapticManager.Impact(ImpactFeedback.Light);
         SceneManager.LoadScene("Scene_Menu");
         Time.timeScale = 1f;
     }
@@ -314,5 +338,8 @@ public class GameManager : MonoBehaviour
             PlayerPrefs.SetInt("VIBRATION", 1);
             VibrationButton.GetComponent<Image>().sprite = on;
         }
+
+        if (PlayerPrefs.GetInt("VIBRATION") == 1)
+            TapticManager.Impact(ImpactFeedback.Light);
     }
 }

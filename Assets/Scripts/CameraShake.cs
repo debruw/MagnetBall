@@ -1,10 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TapticPlugin;
 using UnityEngine;
 
 public class CameraShake : MonoBehaviour
 {
     public float fCamShakeImpulse = 0.0f;  //Camera Shake Impulse
+
+    private void Start()
+    {
+        Application.targetFrameRate = 60;
+    }
 
     private void FixedUpdate()
     {
@@ -19,6 +25,8 @@ public class CameraShake : MonoBehaviour
     */
     public void setCameraShakeImpulseValue(int iShakeValue)
     {
+        if (PlayerPrefs.GetInt("VIBRATION") == 1)
+            TapticManager.Impact(ImpactFeedback.Light);
         if (iShakeValue == 1)
             fCamShakeImpulse = 0.2f;
         else if (iShakeValue == 2)

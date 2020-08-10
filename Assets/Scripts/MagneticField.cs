@@ -45,6 +45,15 @@ public class MagneticField : MonoBehaviour
         }
     }
 
+    private void OnCollisionStay(Collision collision)
+    {
+        if (isactive)
+        {
+            GameManager.Instance._ballController.gameObject.SetActive(false);
+            GameManager.Instance.GameLose();
+        }
+    }
+
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Ball"))
